@@ -12,6 +12,10 @@
 
     # Multimedia
     ffmpeg
+
+    # Fonts
+    nerd-fonts.hack  # Hack Nerd Font
+    source-han-code-jp  # Adobe's programming font with excellent Japanese support
   ];
 
   # macOS-specific environment variables
