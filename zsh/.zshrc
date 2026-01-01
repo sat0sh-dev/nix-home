@@ -59,6 +59,12 @@ alias gst='git stash'
 alias hms='cd ~/nix-home && nix run home-manager/master -- switch --flake .#home-dev --impure'
 alias hme='cd ~/nix-home && nvim'
 
+# Home-Manager with target selection (primarily for macOS)
+gms() {
+  local target="${1:-mac}"
+  cd ~/nix-home && nix run home-manager/master -- switch --flake .#${target} --impure
+}
+
 # Directory navigation
 alias ..='cd ..'
 alias ...='cd ../..'
