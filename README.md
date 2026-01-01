@@ -26,6 +26,9 @@ This configuration provides a declarative, cross-platform setup for development 
 ~/nix-home/
 ├── flake.nix               # Main Nix configuration
 ├── flake.lock              # Dependency lock file
+├── common.nix              # Shared configuration (all platforms)
+├── mac.nix                 # macOS-specific packages
+├── home-dev.nix            # Linux-specific packages
 ├── starship.toml           # Starship prompt configuration
 ├── README.md               # This file
 ├── CHEATSHEET.md          # Quick reference for keybindings
@@ -36,9 +39,12 @@ This configuration provides a declarative, cross-platform setup for development 
 │       ├── editor.lua     # File explorer, which-key
 │       ├── coding.lua     # AI completion, treesitter
 │       ├── lsp.lua        # LSP configuration
-│       └── markdown.lua   # Markdown preview
+│       ├── markdown.lua   # Markdown preview
+│       └── git.lua        # Git integration (NEW!)
 ├── tmux/                   # Tmux configuration
-│   └── tmux.conf
+│   └── tmux.conf          # OSC 52 clipboard support
+├── wezterm/                # Wezterm configuration (macOS)
+│   └── wezterm.lua        # Terminal with SSH clipboard
 └── zsh/                    # Zsh configuration
     └── .zshrc
 ```
@@ -72,13 +78,15 @@ This configuration provides a declarative, cross-platform setup for development 
 
    For Linux (Ubuntu):
    ```bash
-   nix run home-manager/master -- switch --flake .#home-dev
+   nix run home-manager/master -- switch --flake .#home-dev --impure
    ```
 
    For macOS (Apple Silicon):
    ```bash
-   nix run home-manager/master -- switch --flake .#mac
+   nix run home-manager/master -- switch --flake .#mac --impure
    ```
+
+   **Note**: The `--impure` flag is required because the configuration uses environment variables (`$USER`, `$HOME`) for flexibility across machines.
 
 3. **Set zsh as default shell (optional):**
    ```bash
@@ -171,12 +179,14 @@ Edit `flake.nix` to add your own profiles or modify existing ones.
 
 ### Core Tools
 - **neovim**: Text editor with lazy.nvim plugin manager and LSP
-- **tmux**: Terminal multiplexer with vim-style navigation
+- **tmux**: Terminal multiplexer with vim-style navigation and SSH clipboard support (OSC 52)
 - **zsh**: Shell with Starship prompt, autosuggestions, and syntax highlighting
+- **wezterm** (macOS): Modern GPU-accelerated terminal with OSC 52 clipboard integration
 
 ### Development Tools
 - **git**: Version control
 - **gh**: GitHub CLI
+- **lazygit**: Terminal UI for Git operations
 - **nodejs**: JavaScript runtime (required for markdown-preview.nvim)
 - **ripgrep (rg)**: Fast grep alternative
 - **fd**: Fast find alternative
@@ -184,20 +194,162 @@ Edit `flake.nix` to add your own profiles or modify existing ones.
 - **direnv**: Automatic environment switching per directory
 - **nix-direnv**: Improved direnv integration with Nix
 - **starship**: Cross-shell prompt with Git and language version indicators
+- **htop**: Interactive process viewer
+- **xclip** (Linux): X11 clipboard tool
 
 ### Container Tools
 - **podman**: Container runtime
 
 ### Neovim Plugins
+
+**Editor:**
 - **kanagawa.nvim**: Colorscheme
 - **lualine.nvim**: Statusline
 - **oil.nvim**: File explorer (edit directories like text)
+- **which-key.nvim**: Keybinding help
+- **nvim-treesitter**: Syntax highlighting
+
+**Coding:**
 - **nvim-lspconfig**: LSP client (Python, Rust, C++ support)
 - **nvim-cmp**: Auto-completion engine
 - **Codeium**: AI code completion
 - **markdown-preview.nvim**: Live markdown preview
-- **which-key.nvim**: Keybinding help
-- **nvim-treesitter**: Syntax highlighting
+
+**Git Integration:**
+- **gitsigns.nvim**: Git signs in gutter, blame, hunk operations
+- **neogit**: Magit-like Git interface for Neovim
+- **diffview.nvim**: Enhanced diff and file history viewer
+- **vim-fugitive**: Classic Git commands
+
+## Git Workflow
+
+### lazygit (Terminal UI)
+
+The fastest way to interact with Git:
+
+```bash
+# In any git repository
+lg  # or lazygit
+
+# Main operations
+Space    # Stage/unstage file
+c        # Commit
+P        # Push
+p        # Pull
+[/]      # Previous/next tab
+?        # Help
+q        # Quit
+```
+
+**Workflow:**
+1. `lg` to open lazygit
+2. Navigate with arrows/hjkl
+3. `Space` to stage files
+4. `c` to commit
+5. `P` to push
+
+### Neovim Git Integration
+
+**gitsigns** shows changes in the gutter:
+- `]c` / `[c`: Jump to next/previous change
+- `<leader>hp`: Preview hunk
+- `<leader>hb`: Git blame for line
+- `<leader>hs`: Stage hunk
+- `<leader>hr`: Reset hunk
+
+**Neogit** for full Git operations in Neovim:
+- `<leader>gg`: Open Neogit
+- `<leader>gc`: Git commit
+- `<leader>gp`: Git push
+
+**Diffview** for reviewing changes:
+- `<leader>gd`: Open diff view
+- `<leader>gh`: File history
+- `<leader>gH`: Repository history
+
+See CHEATSHEET.md for complete keybindings.
+
+## SSH Clipboard Integration
+
+Copy text from remote tmux sessions to your local clipboard using **OSC 52**.
+
+### How It Works
+
+1. **tmux** sends clipboard data via escape sequences
+2. **Wezterm** (macOS) or compatible terminal receives it
+3. Text appears in your local system clipboard
+
+### Setup (macOS with Wezterm)
+
+**Already configured!** Just use tmux copy mode:
+
+```bash
+# SSH into Linux machine
+ssh user@remote
+
+# In tmux
+Ctrl+b [          # Enter copy mode
+v                 # Start selection (vim-style)
+hjkl or arrows    # Navigate
+y                 # Copy to clipboard
+```
+
+**Paste on macOS:**
+- Any application: `Cmd+V`
+- Terminal: `Cmd+V`
+
+### Terminal Requirements
+
+**Wezterm** (recommended, macOS):
+- Pre-configured in `~/nix-home/wezterm/wezterm.lua`
+- OSC 52 enabled by default
+
+**Other terminals:**
+- **iTerm2**: Enable in Settings → General → Selection → "Applications in terminal may access clipboard"
+- **VS Code**: Supported by default
+- **Alacritty**: Add `save_to_clipboard: true` in config
+
+## Platform-Specific Configuration
+
+This configuration uses a modular approach for platform-specific packages:
+
+### Common Packages (`common.nix`)
+Packages available on all platforms:
+- git, gh, lazygit
+- neovim, tmux
+- ripgrep, fd, fzf
+- direnv, starship
+- podman, htop
+
+### macOS-Specific (`mac.nix`)
+- wezterm (terminal)
+- pinentry_mac (GPG)
+
+### Linux-Specific (`home-dev.nix`)
+- xclip (clipboard)
+- pinentry-curses (GPG)
+
+### Adding Packages
+
+**For all platforms:** Edit `common.nix`
+```nix
+home.packages = with pkgs; [
+  git
+  # Add your package here
+];
+```
+
+**For macOS only:** Edit `mac.nix`
+**For Linux only:** Edit `home-dev.nix`
+
+Then apply:
+```bash
+# Linux
+hms
+
+# macOS
+gms
+```
 
 ## Customization
 

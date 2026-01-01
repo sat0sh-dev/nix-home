@@ -38,20 +38,63 @@ Ctrl+b <number>             # Go to window number
 Ctrl+b ,                     # Rename window
 ```
 
-### Copy Mode
+### Copy Mode (Vim-style)
 ```
 Ctrl+b [                     # Enter copy mode
-Space                        # Start selection
-Enter                        # Copy selection
-Ctrl+b ]                     # Paste
+v                            # Start selection (vim-style)
+hjkl or arrows              # Navigate
+y                            # Copy to clipboard (works over SSH!)
+Ctrl+b ]                     # Paste in tmux
 q                            # Quit copy mode
 ```
+
+**SSH Clipboard (OSC 52):**
+Copy in tmux → Paste on local machine with `Cmd+V` (macOS) or `Ctrl+V` (Linux)
 
 ### Misc
 ```
 Ctrl+b r                     # Reload tmux config
 Ctrl+b ?                     # Show all keybindings
 ```
+
+---
+
+## 🖥️ WezTerm (macOS Terminal)
+
+### Basic Operations
+```
+Cmd+T                        # New tab
+Cmd+W                        # Close tab
+Cmd+1/2/3...                # Switch to tab number
+Cmd+Shift+[/]               # Previous/next tab
+```
+
+### Pane Management
+```
+Cmd+Shift+|                 # Split horizontal
+Cmd+Shift+_                 # Split vertical
+Cmd+W                        # Close pane
+Cmd+Shift+h/j/k/l          # Navigate panes
+```
+
+### Clipboard (OSC 52)
+```
+# Copy in remote tmux
+Ctrl+b [ → v → y            # Copy in tmux on remote
+
+# Paste on macOS
+Cmd+V                        # Paste in any app (works over SSH!)
+```
+
+### Other
+```
+Cmd+K                        # Clear screen
+Cmd++/-                     # Increase/decrease font size
+Cmd+0                        # Reset font size
+Cmd+Q                        # Quit
+```
+
+**Pro Tip:** Wezterm config is in `~/nix-home/wezterm/wezterm.lua` and auto-reloads on changes!
 
 ---
 
@@ -136,11 +179,14 @@ gp                       # git push
 gl                       # git pull
 glog                     # git log --oneline --graph --decorate
 gst                      # git stash
+lg                       # lazygit (Git TUI)
 ```
 
 **Nix/Home-Manager:**
 ```bash
-hms                      # Home Manager switch (cd ~/nix-home && apply)
+hms                      # Home Manager switch (Linux: .#home-dev)
+gms                      # Home Manager switch (macOS: .#mac, default)
+gms home-dev             # Home Manager switch (explicit target)
 hme                      # Open nix-home in nvim
 ```
 
@@ -312,6 +358,147 @@ u                            # Undo changes (before :w)
 # - Changes are previewed before :w
 # - All vim motions work (w, b, f, t, etc.)
 # - Visual mode for bulk operations
+```
+
+---
+
+## 🔀 Git Integration (lazygit + Neovim)
+
+### lazygit (Terminal UI)
+
+**Launch:**
+```bash
+lg                           # In any git repository
+```
+
+**Main Interface:**
+```
+Status View (1)             # See changed files
+Files View (2)              # Commit history
+Branches View (3)           # Branch management
+Commits View (4)            # Commit details
+Stash View (5)              # Stash management
+```
+
+**File Operations:**
+```
+Space                        # Stage/unstage file
+a                            # Stage all files
+d                            # Discard changes (with confirmation)
+e                            # Edit file
+o                            # Open file in editor
+```
+
+**Commit & Push:**
+```
+c                            # Commit (opens editor)
+C                            # Commit using git commit editor
+A                            # Amend last commit
+P                            # Push
+p                            # Pull
+shift+P                      # Push with options
+```
+
+**Branch Operations:**
+```
+n                            # New branch
+space                        # Checkout branch
+M                            # Merge
+r                            # Rebase
+d                            # Delete branch
+```
+
+**Navigation:**
+```
+hjkl or arrows              # Navigate
+[/]                          # Previous/next tab
+enter                        # Show diff/details
+?                            # Help
+q                            # Quit
+```
+
+### Neovim Git (gitsigns.nvim)
+
+**Hunk Navigation:**
+```
+]c                           # Next hunk (change)
+[c                           # Previous hunk
+```
+
+**Hunk Operations:**
+```
+<leader>hp                   # Preview hunk in floating window
+<leader>hs                   # Stage hunk
+<leader>hr                   # Reset hunk (undo changes)
+<leader>hS                   # Stage entire buffer
+<leader>hR                   # Reset entire buffer
+<leader>hu                   # Undo stage hunk
+```
+
+**Blame & Diff:**
+```
+<leader>hb                   # Show git blame for current line
+<leader>tb                   # Toggle inline blame (on every line)
+<leader>hd                   # Diff this file
+<leader>hD                   # Diff this file against HEAD~
+<leader>td                   # Toggle deleted lines view
+```
+
+**Text Object:**
+```
+# In Visual or Operator-pending mode
+ih                           # Select hunk (e.g., dih to delete hunk)
+```
+
+### Neovim Git (neogit)
+
+**Open Neogit:**
+```
+<leader>gg                   # Open Neogit status
+<leader>gc                   # Open commit interface
+<leader>gp                   # Open push menu
+```
+
+**In Neogit Interface:**
+```
+tab                          # Toggle section/file
+s                            # Stage file/hunk
+u                            # Unstage file/hunk
+c                            # Commit menu
+  c                          # Commit
+  a                          # Amend
+P                            # Push menu
+p                            # Pull menu
+?                            # Help
+q                            # Quit
+```
+
+### Neovim Git (diffview.nvim)
+
+**Open Diff Views:**
+```
+<leader>gd                   # Open diff view (working directory changes)
+<leader>gh                   # File history for current file
+<leader>gH                   # Repository history (all commits)
+```
+
+**In Diffview:**
+```
+]c / [c                      # Next/previous file
+g?                           # Help
+q                            # Close diffview
+```
+
+### Neovim Git (vim-fugitive)
+
+**Commands:**
+```
+<leader>gB                   # Git blame (full window)
+:Git <command>              # Run any git command
+:Git status                 # Git status
+:Git commit                 # Git commit
+:Git push                   # Git push
+:Gdiffsplit                 # Split diff view
 ```
 
 ---
