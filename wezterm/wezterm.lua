@@ -12,18 +12,23 @@ return {
   font_size = 14.0,
 
   -- ========== Color Scheme ==========
-  -- Popular options: "Tokyo Night", "Dracula", "Catppuccin", "Nord"
-  color_scheme = "Tokyo Night",
+  -- Popular options: "Tokyo Night", "Dracula", "Catppuccin Mocha", "Nord", "One Dark"
+  color_scheme = "Catppuccin Mocha",
 
   -- ========== Window Settings ==========
   -- Window appearance
-  window_decorations = "RESIZE",  -- macOS native title bar
+  window_decorations = "TITLE | RESIZE",  -- macOS native title bar with resize
   window_padding = {
     left = 10,
     right = 10,
     top = 10,
     bottom = 10,
   },
+
+  -- Background transparency
+  window_background_opacity = 0.80,  -- 0.0 (transparent) to 1.0 (opaque)
+  macos_window_background_blur = 10,  -- macOS blur effect
+  native_macos_fullscreen_mode = false,  -- Keep transparency in fullscreen
 
   -- Initial window size
   initial_cols = 120,
