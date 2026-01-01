@@ -6,10 +6,10 @@
   home.packages = with pkgs; [
     # Linux utilities
     pinentry-curses
+    xclip  # X11 clipboard tool (for tmux copy to system clipboard)
 
     # Add more Linux-specific packages here
     # Example:
-    # htop
     # docker-compose
   ];
 

@@ -76,6 +76,29 @@
                 echo "✓ starship config already linked"
               fi
             '';
+
+            # Symlink wezterm config from ~/nix-home/wezterm/ to ~/.config/wezterm/ (macOS only)
+            home.activation.linkWeztermConfig = lib.hm.dag.entryAfter ["writeBoundary"] ''
+              # Only link wezterm config on macOS
+              if [[ "$OSTYPE" == "darwin"* ]]; then
+                # Remove old nix-managed wezterm config if it's a symlink
+                if [ -L "$HOME/.config/wezterm/wezterm.lua" ]; then
+                  echo "Removing old nix-managed wezterm config..."
+                  rm -f "$HOME/.config/wezterm/wezterm.lua"
+                fi
+
+                # Create .config/wezterm directory
+                mkdir -p "$HOME/.config/wezterm"
+
+                # Create symlink to nix-home/wezterm/wezterm.lua
+                if [ ! -e "$HOME/.config/wezterm/wezterm.lua" ]; then
+                  echo "Creating symlink: ~/.config/wezterm/wezterm.lua -> ~/nix-home/wezterm/wezterm.lua"
+                  ln -sfn "$HOME/nix-home/wezterm/wezterm.lua" "$HOME/.config/wezterm/wezterm.lua"
+                else
+                  echo "✓ wezterm config already linked"
+                fi
+              fi
+            '';
           })
         ] ++ extraModules;
       };

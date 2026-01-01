@@ -7,10 +7,10 @@
     # macOS utilities
     pinentry_mac
 
-    # Add more macOS-specific packages here
-    # Example:
-    # raycast (if available in nixpkgs)
-    # iterm2 (if available in nixpkgs)
+    # Terminal
+    wezterm
+
+    # Multimedia
     ffmpeg
   ];
 
