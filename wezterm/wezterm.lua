@@ -3,9 +3,8 @@ local wezterm = require 'wezterm'
 
 return {
   -- ========== Clipboard Integration ==========
-  -- Enable OSC 52 for SSH clipboard sharing
+  -- OSC 52 is enabled by default in WezTerm
   -- This allows copying from remote tmux sessions to local macOS clipboard
-  enable_osc52_clipboard = true,
 
   -- ========== Font Settings ==========
   font_size = 14.0,
