@@ -7,6 +7,7 @@
     # Version control
     git
     gh
+    lazygit  # Terminal UI for git
 
     # Search tools
     ripgrep

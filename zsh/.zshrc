@@ -54,6 +54,7 @@ alias gp='git push'
 alias gl='git pull'
 alias glog='git log --oneline --graph --decorate'
 alias gst='git stash'
+alias lg='lazygit'  # Git TUI
 
 # Nix/Home-Manager
 alias hms='cd ~/nix-home && nix run home-manager/master -- switch --flake .#home-dev --impure'
