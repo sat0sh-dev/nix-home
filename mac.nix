@@ -15,6 +15,7 @@
 
     # Fonts
     nerd-fonts.hack  # Hack Nerd Font
+    nerd-fonts.jetbrains-mono  # JetBrains Mono Nerd Font
     source-han-code-jp  # Adobe's programming font with excellent Japanese support
   ];
 

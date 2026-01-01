@@ -7,8 +7,11 @@ return {
   -- This allows copying from remote tmux sessions to local macOS clipboard
 
   -- ========== Font Settings ==========
-  -- Source Han Code JP: Adobe's programming font with complete Japanese support
-  font = wezterm.font('Source Han Code JP R'),  -- R = Regular weight
+  -- JetBrains Mono with Japanese fallback
+  font = wezterm.font_with_fallback({
+    'JetBrainsMono Nerd Font Mono',  -- Main font (English, icons)
+    'Source Han Code JP',            -- Japanese fallback
+  }),
   font_size = 14.0,
 
   -- ========== Color Scheme ==========
