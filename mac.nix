@@ -10,9 +10,6 @@
     # Terminal
     wezterm
 
-    # Multimedia
-    ffmpeg
-
     # Fonts
     nerd-fonts.hack  # Hack Nerd Font
     nerd-fonts.jetbrains-mono  # JetBrains Mono Nerd Font
