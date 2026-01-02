@@ -88,6 +88,15 @@ alias ports='netstat -tulanp'
 bindkey '^P' up-line-or-history      # Ctrl+p: Previous command
 bindkey '^N' down-line-or-history    # Ctrl+n: Next command
 
+# ===== zsh-autosuggestions settings =====
+# Accept suggestion with right arrow (entire line)
+bindkey '^[[C' forward-char          # Right arrow: move cursor (not accept suggestion)
+bindkey '^F' autosuggest-accept      # Ctrl+f: accept entire suggestion
+bindkey '^[f' forward-word           # Alt+f: accept one word
+
+# Clear autosuggestion with Escape
+bindkey '^[' autosuggest-clear       # Escape: clear suggestion
+
 # ===== fzf (Fuzzy Finder) =====
 # Ctrl+r: Interactive history search
 # Ctrl+t: Fuzzy file search
