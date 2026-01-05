@@ -624,9 +624,51 @@ direnv deny                  # Disable environment for this directory
 
 ---
 
-## 🧠 Claude Code Integration
+## 🧠 AI Coding (Claude Code + Ollama Fallback)
 
-### Recommended Workflow
+### AI Fallback System (Linux only)
+
+**⚠️ home-dev (Linux) only - macOS not supported**
+
+Automatic fallback from Claude Code to Ollama + aider when rate limits occur.
+
+#### Single-Prompt Mode
+```bash
+# Use ai-code for one-off tasks
+ai-code "refactor this function"
+ai-code "add error handling to auth.py"
+ai-code "explain the database schema"
+
+# Shows which AI is running:
+[AI: Claude Code]                          # Normal operation
+[AI: Ollama + Aider (fallback)]           # Rate limit detected
+```
+
+#### Setup (First Time)
+```bash
+# 1. Apply configuration
+cd ~/nix-home
+hms
+
+# 2. Install Ollama model
+ollama pull deepseek-coder:6.7b
+
+# 3. Start Ollama server
+ollama serve &
+```
+
+#### Interactive Mode
+```bash
+claude                       # Claude Code interactive session
+aider                        # Ollama + aider interactive session
+```
+
+**Documentation**: See `AI_FALLBACK.md` for detailed setup and troubleshooting.
+
+---
+
+### Claude Code Interactive Workflow
+
 ```bash
 # 1. Start tmux session
 tmux new -s coding

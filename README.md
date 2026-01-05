@@ -309,6 +309,93 @@ y                 # Copy to clipboard
 - **VS Code**: Supported by default
 - **Alacritty**: Add `save_to_clipboard: true` in config
 
+## AI Fallback System (Linux only)
+
+### Overview
+
+**⚠️ Linux (home-dev) only - macOS not supported due to memory constraints**
+
+An automatic fallback system that switches from Claude Code to Ollama + aider when rate limits are encountered, then automatically returns to Claude Code when available.
+
+### Features
+
+- **Automatic switching**: Detects Claude Code rate limits and falls back to Ollama + aider
+- **Transparent operation**: Always shows which AI is running
+- **Zero manual intervention**: Automatic recovery when rate limits clear
+- **Context preservation**: Uses CLAUDE.md, README.md, and git history as "true memory"
+
+### Quick Start
+
+**1. Apply configuration:**
+```bash
+cd ~/nix-home
+nix run home-manager/master -- switch --flake .#home-dev --impure
+```
+
+**2. Install Ollama model:**
+```bash
+ollama pull deepseek-coder:6.7b
+```
+
+**3. Start Ollama server:**
+```bash
+ollama serve &
+```
+
+**4. Use ai-code:**
+```bash
+ai-code "refactor this function"
+```
+
+### Usage
+
+**Normal operation (Claude Code):**
+```bash
+$ ai-code "fix the bug in auth.py"
+[AI: Claude Code]
+... output ...
+```
+
+**Rate limit detected (automatic fallback):**
+```bash
+$ ai-code "add logging to database.py"
+[AI: Ollama + Aider (fallback - rate limit detected)]
+... output from Ollama + aider ...
+```
+
+**Next request (automatic recovery):**
+```bash
+$ ai-code "update README"
+[AI: Claude Code]  # Automatically recovered!
+... output ...
+```
+
+### Documentation
+
+- **Setup & Operation**: See `AI_FALLBACK.md` for detailed setup instructions
+- **Project Template**: See `CLAUDE_TEMPLATE.md` for project-specific AI contract template
+- **Troubleshooting**: Common issues and solutions in `AI_FALLBACK.md`
+
+### Environment Variables
+
+**OLLAMA_KEEP_ALIVE** (default: `5m`)
+- Controls how long Ollama keeps models in memory after inference
+- `5m`: Release memory after 5 minutes (recommended)
+- `0`: Release immediately (slower for repeated use)
+- `24h`: Keep in memory 24 hours (high memory usage)
+
+### Interactive Mode
+
+For interactive sessions, use the tools directly:
+```bash
+claude     # Claude Code interactive mode
+aider      # Ollama + aider interactive mode
+```
+
+The `ai-code` wrapper is designed for single-prompt operations only.
+
+---
+
 ## Platform-Specific Configuration
 
 This configuration uses a modular approach for platform-specific packages:
@@ -328,6 +415,10 @@ Packages available on all platforms:
 ### Linux-Specific (`home-dev.nix`)
 - xclip (clipboard)
 - pinentry-curses (GPG)
+- **AI Fallback System** (see "AI Fallback System" section above):
+  - ollama (local LLM runtime)
+  - aider-chat (AI pair programming)
+  - ai-code (wrapper CLI with automatic fallback)
 
 ### Adding Packages
 
