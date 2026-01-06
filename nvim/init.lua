@@ -61,6 +61,7 @@ vim.g.mapleader = " "
 
 vim.keymap.set("n", "<leader>ww", ":w<CR>", { silent = true, desc = "Save file" })
 vim.keymap.set("n", "<leader>q", ":q<CR>", { silent = true, desc = "Quit" })
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR><Esc>", { silent = true, desc = "Clear search highlight" })
 
 -- Window management
 vim.keymap.set("n", "<leader>ws", "<C-w>s", { desc = "Split window horizontally" })
