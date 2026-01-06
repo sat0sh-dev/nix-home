@@ -13,6 +13,9 @@ export PATH="$HOME/.local/bin:$PATH"
 # User custom binaries
 export PATH="$HOME/bin:$PATH"
 
+# npm global binaries
+export PATH="$HOME/.npm-global/bin:$PATH"
+
 # ===== Environment variables =====
 export EDITOR=nvim
 
