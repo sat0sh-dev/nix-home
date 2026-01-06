@@ -58,7 +58,9 @@ return {
       local function close_oil_window()
         local oil_win = find_oil_window()
         if oil_win and vim.api.nvim_win_is_valid(oil_win) then
-          vim.api.nvim_win_close(oil_win, true)
+          if #vim.api.nvim_tabpage_list_wins(0) > 1 then
+            vim.api.nvim_win_close(oil_win, true)
+          end
         end
       end
 
