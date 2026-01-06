@@ -59,8 +59,29 @@ vim.opt.hlsearch = true
 -- ===== Keymaps =====
 vim.g.mapleader = " "
 
-vim.keymap.set("n", "<leader>w", ":w<CR>", { silent = true })
-vim.keymap.set("n", "<leader>q", ":q<CR>", { silent = true })
+vim.keymap.set("n", "<leader>ww", ":w<CR>", { silent = true, desc = "Save file" })
+vim.keymap.set("n", "<leader>q", ":q<CR>", { silent = true, desc = "Quit" })
+
+-- Window management
+vim.keymap.set("n", "<leader>ws", "<C-w>s", { desc = "Split window horizontally" })
+vim.keymap.set("n", "<leader>wv", "<C-w>v", { desc = "Split window vertically" })
+vim.keymap.set("n", "<leader>wx", "<C-w>c", { desc = "Close current window" })
+vim.keymap.set("n", "<leader>we", "<C-w>=", { desc = "Equalize window sizes" })
+vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Move to left window" })
+vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Move to lower window" })
+vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Move to upper window" })
+vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
+vim.keymap.set("n", "<C-Up>", ":resize +2<CR>", { desc = "Increase window height" })
+vim.keymap.set("n", "<C-Down>", ":resize -2<CR>", { desc = "Decrease window height" })
+vim.keymap.set("n", "<C-Left>", ":vertical resize -2<CR>", { desc = "Decrease window width" })
+vim.keymap.set("n", "<C-Right>", ":vertical resize +2<CR>", { desc = "Increase window width" })
+
+-- Tab management
+vim.keymap.set("n", "<leader>tn", ":tabnext<CR>", { desc = "Next tab" })
+vim.keymap.set("n", "<leader>tp", ":tabprevious<CR>", { desc = "Previous tab" })
+vim.keymap.set("n", "<leader>tc", ":tabnew<CR>", { desc = "New tab" })
+vim.keymap.set("n", "<leader>tx", ":tabclose<CR>", { desc = "Close tab" })
+vim.keymap.set("n", "<leader>to", ":tabonly<CR>", { desc = "Close other tabs" })
 
 -- Markdown preview
 vim.keymap.set("n", "<leader>mp", ":MarkdownPreview<CR>", { silent = true, desc = "Markdown Preview" })
