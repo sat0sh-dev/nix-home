@@ -92,9 +92,17 @@ alias ports='netstat -tulanp'
 # Add your custom zsh settings below
 
 # ===== Keybindings =====
+# Use emacs-style keybindings for ZLE
+bindkey -e
+
 # Vim-style history navigation
 bindkey '^P' up-line-or-history      # Ctrl+p: Previous command
 bindkey '^N' down-line-or-history    # Ctrl+n: Next command
+
+# Restore common control keys if a plugin resets the keymap
+bindkey '^A' beginning-of-line
+bindkey '^E' end-of-line
+bindkey '^M' accept-line
 
 # ===== zsh-autosuggestions settings =====
 # Accept suggestion with right arrow (entire line)
