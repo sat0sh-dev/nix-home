@@ -6,6 +6,7 @@
   home.packages = with pkgs; [
     # macOS utilities
     pinentry_mac
+    android-tools  # adb/fastboot for Android debugging
 
     # Terminal
     wezterm

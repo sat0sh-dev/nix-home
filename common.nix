@@ -71,7 +71,7 @@
     enable = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
-    initExtra = lib.mkBefore ''
+    initContent = lib.mkBefore ''
       # Source ~/nix-home/zsh/.zshrc
       if [ -f "$HOME/nix-home/zsh/.zshrc" ]; then
         source "$HOME/nix-home/zsh/.zshrc"

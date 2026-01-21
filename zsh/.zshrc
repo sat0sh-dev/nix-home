@@ -4,6 +4,11 @@ if [ -e /etc/profile.d/nix.sh ]; then
   . /etc/profile.d/nix.sh
 fi
 
+# --- Nix initialization (macOS multi-user install) ---
+if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
+  . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+fi
+
 # Nix profile binaries
 export PATH="$HOME/.nix-profile/bin:$PATH"
 
