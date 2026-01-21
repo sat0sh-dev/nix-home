@@ -95,6 +95,9 @@ alias ports='netstat -tulanp'
 # Use emacs-style keybindings for ZLE
 bindkey -e
 
+# Normalize CR/NL behavior so Enter doesn't echo as ^M in tty prompts.
+stty icrnl -echoctl
+
 # Vim-style history navigation
 bindkey '^P' up-line-or-history      # Ctrl+p: Previous command
 bindkey '^N' down-line-or-history    # Ctrl+n: Next command
