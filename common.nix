@@ -25,6 +25,12 @@
 
     # Development tools
     nodejs
+    pass
+    gnupg
+    jdk17
+    kotlin
+    kotlin-language-server
+    ktlint
 
     # Container tools
     podman
@@ -44,6 +50,7 @@
   # Environment variables
   home.sessionVariables = {
     EDITOR = "nvim";
+    JAVA_HOME = "${pkgs.jdk17}";
   };
 
   # Install global npm packages for AI CLIs
@@ -71,6 +78,9 @@
     enable = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
+    envExtra = ''
+      export PATH="$HOME/.npm-global/bin:$HOME/bin:$HOME/.local/bin:$PATH"
+    '';
     initContent = lib.mkBefore ''
       # Source ~/nix-home/zsh/.zshrc
       if [ -f "$HOME/nix-home/zsh/.zshrc" ]; then
@@ -84,4 +94,16 @@
     enable = true;
     defaultEditor = true;
   };
+
+  # Ensure zsh config is loaded even when ZDOTDIR points to ~/.config/zsh
+  home.file.".config/zsh/.zshenv".text = ''
+    if [ -f "$HOME/.zshenv" ]; then
+      . "$HOME/.zshenv"
+    fi
+  '';
+  home.file.".config/zsh/.zshrc".text = ''
+    if [ -f "$HOME/.zshrc" ]; then
+      . "$HOME/.zshrc"
+    fi
+  '';
 }
