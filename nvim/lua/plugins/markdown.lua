@@ -5,7 +5,9 @@ return {
     "iamcco/markdown-preview.nvim",
     cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
     ft = { "markdown" },
-    build = "cd app && npm install",
+    build = function()
+      vim.fn["mkdp#util#install"]()
+    end,
     init = function()
       -- Server listens on all interfaces (required for SSH forwarding)
       vim.g.mkdp_open_to_the_world = 1
@@ -18,12 +20,11 @@ return {
       vim.g.mkdp_echo_preview_url = 0
 
       -- Custom function to show localhost URL
-      vim.g.mkdp_browserfunc = 'g:OpenMarkdownPreview'
-    end,
-    config = function()
+      vim.g.mkdp_browserfunc = "OpenMarkdownPreview"
+
       -- Custom function to display localhost URL
       vim.cmd([[
-        function! g:OpenMarkdownPreview(url)
+        function! OpenMarkdownPreview(url)
           " Replace IP address with localhost
           let localhost_url = substitute(a:url, 'http://[0-9.]\+:', 'http://localhost:', '')
           " Display the localhost URL

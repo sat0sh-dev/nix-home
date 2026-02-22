@@ -88,6 +88,7 @@ vim.keymap.set("n", "<leader>to", ":tabonly<CR>", { desc = "Close other tabs" })
 vim.keymap.set("n", "<leader>mp", ":MarkdownPreview<CR>", { silent = true, desc = "Markdown Preview" })
 vim.keymap.set("n", "<leader>ms", ":MarkdownPreviewStop<CR>", { silent = true, desc = "Markdown Preview Stop" })
 
+
 -- Codeium AI (keybindings work in Insert mode)
 -- <Tab>  : Accept suggestion
 -- <C-n>  : Next suggestion

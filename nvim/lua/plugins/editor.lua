@@ -64,8 +64,17 @@ return {
         end
       end
 
+      local function is_directory_entry(entry)
+        return entry and (entry.type == "directory" or entry.type == "dir")
+      end
+
       local function open_in_target()
         local target = find_target_window()
+        local entry = oil.get_cursor_entry()
+        if is_directory_entry(entry) then
+          oil.select({ close = false })
+          return
+        end
         oil.select({
           close = false,
           handle_buffer_callback = function(bufnr)
@@ -82,6 +91,11 @@ return {
 
       local function open_in_target_split(opts)
         local target = find_target_window()
+        local entry = oil.get_cursor_entry()
+        if is_directory_entry(entry) then
+          oil.select({ close = false })
+          return
+        end
         oil.select({
           close = false,
           handle_buffer_callback = function(bufnr)
@@ -100,6 +114,11 @@ return {
       end
 
       local function open_in_new_tab()
+        local entry = oil.get_cursor_entry()
+        if is_directory_entry(entry) then
+          oil.select({ close = false })
+          return
+        end
         oil.select({
           close = false,
           handle_buffer_callback = function(bufnr)
