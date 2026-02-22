@@ -65,7 +65,13 @@ alias gst='git stash'
 alias lg='lazygit'  # Git TUI
 
 # Nix/Home-Manager
-alias hms='cd ~/nix-home && nix run home-manager/master -- switch --flake .#home-dev --impure'
+# Home-Manager switch (returns to original directory)
+unalias hms 2>/dev/null || true
+hms() {
+  pushd ~/nix-home > /dev/null
+  nix run home-manager/master -- switch --flake .#home-dev --impure
+  popd > /dev/null
+}
 alias hme='cd ~/nix-home && nvim'
 
 # Home-Manager with target selection (primarily for macOS)

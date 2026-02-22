@@ -6,8 +6,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # mdserve - Instant MkDocs server
+    mdserve.url = "github:sat0sh-dev/mdserve";
   };
-  outputs = { nixpkgs, home-manager, ... }:
+  outputs = { nixpkgs, home-manager, mdserve, ... }:
   let
     # ===== Common Home Manager configuration =====
     mkHome = { system, username, homeDir, extraModules ? [] }:
@@ -21,6 +23,11 @@
             home.username = username;
             home.homeDirectory = homeDir;
             home.stateVersion = "23.11";
+
+            # Add mdserve to packages
+            home.packages = [
+              mdserve.packages.${system}.default
+            ];
 
             # Symlink nvim config from ~/nix-home/nvim/ to ~/.config/nvim/
             # Changes apply immediately without going through nix store
