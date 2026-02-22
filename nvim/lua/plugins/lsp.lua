@@ -16,7 +16,9 @@ return {
     },
     config = function()
       local lspconfig = require("lspconfig")
+      local util = require("lspconfig.util")
       local cmp_nvim_lsp = require("cmp_nvim_lsp")
+      local using_new_api = vim.fn.has("nvim-0.11") == 1 and vim.lsp and vim.lsp.config ~= nil
 
       -- Configure diagnostics
       vim.diagnostic.config({
@@ -31,12 +33,27 @@ return {
       -- Add LSP capabilities to completion
       local capabilities = cmp_nvim_lsp.default_capabilities()
 
+      local setup_server = function(name, config)
+        local merged = vim.tbl_deep_extend("force", {
+          on_attach = on_attach,
+          capabilities = capabilities,
+        }, config or {})
+
+        if using_new_api then
+          vim.lsp.config(name, merged)
+          vim.lsp.enable(name)
+        else
+          lspconfig[name].setup(merged)
+        end
+      end
+
       -- Keybindings when LSP attaches to buffer
       local on_attach = function(client, bufnr)
         local opts = { buffer = bufnr, silent = true }
 
         -- Navigation
         vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)           -- Go to definition
+        vim.keymap.set("n", "<C-]>", vim.lsp.buf.definition, opts)      -- Ctrl-] to use LSP definition
         vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)          -- Go to declaration
         vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)           -- Find references
         vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)       -- Go to implementation
@@ -59,9 +76,7 @@ return {
       end
 
       -- Python LSP (pylsp)
-      lspconfig.pylsp.setup({
-        on_attach = on_attach,
-        capabilities = capabilities,
+      setup_server("pylsp", {
         settings = {
           pylsp = {
             plugins = {
@@ -75,12 +90,11 @@ return {
       })
 
       -- Rust LSP (rust-analyzer)
-      lspconfig.rust_analyzer.setup({
-        on_attach = on_attach,
-        capabilities = capabilities,
+      setup_server("rust_analyzer", {
         settings = {
           ["rust-analyzer"] = {
-            checkOnSave = {
+            checkOnSave = true,
+            check = {
               command = "clippy",  -- Use clippy for linting
             },
           },
@@ -88,15 +102,28 @@ return {
       })
 
       -- C++ LSP (clangd)
-      lspconfig.clangd.setup({
-        on_attach = on_attach,
-        capabilities = capabilities,
+      setup_server("clangd", {
         cmd = {
           "clangd",
           "--background-index",
           "--clang-tidy",
           "--completion-style=detailed",
         },
+      })
+
+      -- Kotlin LSP (kotlin-language-server)
+      setup_server("kotlin_language_server", {
+        root_dir = util.root_pattern(
+          "settings.gradle",
+          "build.gradle",
+          "build.gradle.kts",
+          "gradle.properties",
+          ".git"
+        ),
+        init_options = {
+          storagePath = vim.fn.stdpath("cache") .. "/kotlin-language-server",
+        },
+        single_file_support = true,
       })
 
       -- Configure diagnostics display
@@ -118,6 +145,22 @@ return {
         local hl = "DiagnosticSign" .. type
         vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
       end
+    end,
+  },
+
+  -- Formatting + linting (none-ls)
+  {
+    "nvimtools/none-ls.nvim",
+    event = { "BufReadPre", "BufNewFile" },
+    config = function()
+      local null_ls = require("null-ls")
+
+      null_ls.setup({
+        sources = {
+          null_ls.builtins.formatting.ktlint,
+          null_ls.builtins.diagnostics.ktlint,
+        },
+      })
     end,
   },
 
